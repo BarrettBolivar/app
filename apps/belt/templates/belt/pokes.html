@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Pokes</title>
+	</head>
+	<body>
+		<a href="/logout">Log out</a></h4>
+		<h3>Welcome: {{current_user.first_name}} {{current_user.last_name}}</h3>
+		{% if user_poke_count.count == 0 %}
+			<h3>No one has poked you yet</h3>
+		{%else %}
+			<h3> You have been poked: {{user_poke_count.count}} time(s) </h3>
+			<h4>List of people who have poked you</h4>
+			<!-- not working properly but working somewhat, counter allows it to work to the degree now but implementation of Poke.total 
+			is being elusive in the timeframe allowed to me -->
+			{% for list in list_of_users %}
+				<p>{{list.poker.first_name}} {{list.poker.last_name}} poked you {{ list.counter }} time(s)</p>
+			{%endfor%}
+		{%endif%}
+		<!-- I really should use tables more but I did this so it would be easier to read, that was my hope anyway -->
+		<table>
+			<thead>
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Email Address</th>
+					<th>Poke History</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for user in users %}
+				<tr>
+					<td>{{user.first_name}}</td>
+					<td>{{user.last_name}}</td>
+					<td>{{user.email}}</td>
+					<td>{{user.pokedpokes.count}}</td>
+					<td><a href="/pokes/{{user.id}}/"><button>Poke</button></a></td>
+				</tr>
+
+			{%endfor%}
+			</tbody>
+		</table>
+	</body>
+</html>
