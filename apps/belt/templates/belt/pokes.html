@@ -2,44 +2,117 @@
 <html>
 	<head>
 		<title>Pokes</title>
+		{% load static %}
+		<link rel="stylesheet" type="text/css" href="{% static 'kingdoms/css/style.css' %}" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<!-- jquery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	</head>
 	<body>
-		<a href="/logout">Log out</a></h4>
-		<h3>Welcome: {{current_user.first_name}} {{current_user.last_name}}</h3>
-		{% if user_poke_count.count == 0 %}
-			<h3>No one has poked you yet</h3>
-		{%else %}
-			<h3> You have been poked: {{user_poke_count.count}} time(s) </h3>
-			<h4>List of people who have poked you</h4>
-			<!-- not working properly but working somewhat, counter allows it to work to the degree now but implementation of Poke.total 
-			is being elusive in the timeframe allowed to me -->
-			{% for list in list_of_users %}
-				<p>{{list.poker.first_name}} {{list.poker.last_name}} poked you {{ list.counter }} time(s)</p>
-			{%endfor%}
-		{%endif%}
+		<div class="col-xs-1">
+			<a href="/logout">Log out</a></h4>
+		</div>
+		<div class="col-sm-4 col-md-4">
+			<h3>Welcome: {{current_user.first_name}} {{current_user.last_name}}</h3>
+			{% if user_poke_count.count == 0 %}
+				<h3>No one has poked you yet</h3>
+			{%else %}
+				<h3> You have been poked: {{user_poke_count.count}} time(s) </h3>
+				<h4>List of people who have poked you</h4>
+				<!-- not working properly but working somewhat, counter allows it to work to the degree now but implementation of Poke.total 
+				is being elusive in the timeframe allowed to me -->
+				{% for list in list_of_users %}
+					<p>{{list.poker.first_name}} {{list.poker.last_name}} poked you {{ list.counter }} on {{ list.created_at }}</p>
+				{%endfor%}
+			{%endif%}
+		</div>
 		<!-- I really should use tables more but I did this so it would be easier to read, that was my hope anyway -->
-		<table>
-			<thead>
-				<tr>
-					<th>First Name</th>
-					<th>Last Name</th>
-					<th>Email Address</th>
-					<th>Poke History</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-			{% for user in users %}
-				<tr>
-					<td>{{user.first_name}}</td>
-					<td>{{user.last_name}}</td>
-					<td>{{user.email}}</td>
-					<td>{{user.pokedpokes.count}}</td>
-					<td><a href="/pokes/{{user.id}}/"><button>Poke</button></a></td>
-				</tr>
-
-			{%endfor%}
-			</tbody>
-		</table>
+		<div class="col-sm-4 col-md-6">
+			<input id="clickMe" type="button" value="Sort Ascending" onclick="sortTable();" />
+			<input id="clickMe" type="button" value="Sort Descending" onclick="sortTableD();" />
+			<div class="table-responsive table-striped">
+				<table class="listedUsers table table-hover">
+					<thead>
+						<tr>
+							<th>First Name</th>
+							<th>Last Name</th>
+							<th>Email Address</th>
+							<th>Poke History</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for user in users %}
+						<tr>
+							<td>{{user.first_name}}</td>
+							<td>{{user.last_name}}</td>
+							<td>{{user.email}}</td>
+							<td class="UserPokedPokes">{{user.pokedpokes.count}}</td>
+							<td><a href="/pokes/{{user.id}}/"><button><span class="glyphicon glyphicon-hand-left"></span>Poke</button></a></td>
+						</tr>
+					{%endfor%}
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</body>
+<script>
+$(document).ready(function() {
+	sortTable();
+});
+function sortTable() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementsByClassName("listedUsers")[0];
+  switching = true;
+  while (switching) {
+    switching = false;
+    rows = table.getElementsByTagName("tbody")[0].getElementsByTagName('tr');
+    for (i = 0; i < (rows.length - 1); i++) {
+		console.log("for loop");
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("td")[0];
+      y = rows[i + 1].getElementsByTagName("td")[0];
+	  pokedpokeFirst = rows[i].querySelector(".UserPokedPokes").innerHTML;
+	  pokedpokeSecond = rows[i+1].querySelector(".UserPokedPokes").innerHTML;
+	  pokedpokeFirst = Number(pokedpokeFirst);
+	  pokedpokeSecond = Number(pokedpokeSecond);
+	  console.log(pokedpokeFirst);
+      if (pokedpokeFirst < pokedpokeSecond) {
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+function sortTableD() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementsByClassName("listedUsers")[0];
+  switching = true;
+  while (switching) {
+    switching = false;
+    rows = table.getElementsByTagName("tbody")[0].getElementsByTagName('tr');
+    for (i = 0; i < (rows.length - 1); i++) {
+      shouldSwitch = false;
+      x = rows[i].getElementsByTagName("td")[0];
+      y = rows[i + 1].getElementsByTagName("td")[0];
+	  pokedpokeFirst = rows[i].querySelector(".UserPokedPokes").innerHTML;
+	  pokedpokeSecond = rows[i+1].querySelector(".UserPokedPokes").innerHTML;
+	  pokedpokeFirst = Number(pokedpokeFirst);
+	  pokedpokeSecond = Number(pokedpokeSecond);
+      if (pokedpokeFirst > pokedpokeSecond) {
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+</script>
 </html>

@@ -2,37 +2,45 @@
 <html>
 	<head>
 		<title>Login/Registration</title>
+		{% load static %}
+		<link rel="stylesheet" type="text/css" href="{% static 'kingdoms/css/style.css' %}" />
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	</head>
 	<body>
-		{% for fail in errors %}
-			{{ fail }}<br>
-		{% endfor %}
-		{% for success in passes %}
-			{{ success}}<br>
-		{% endfor %}
-
-		<h4>Register</h4>
-		<form action="/register" method="post">
-			{% csrf_token %}
-			First Name: <input type="text" name="first_name"><br>
-			Last Name: <input type="text" name="last_name"><br>
-			Email: <input type="text" name="email"><br>
-			<!-- multiple attempts at using the type = 'date' couldn't get it to save properly into the db -->
-			Date of Birth: <input type="text" name="dob" placeholder="YYYY-MM-DD"><br>
-			Password: <input type="password" name="password"><br>
-			<h4>Password must be at least 8 characters</h4><br>
-			Confirm Password: <input type="password" name="cpassword"><br>
-			<input type="submit" value="Register"><br>
-		</form>
-		<h4>Login</h4>
-		{% for fail in log_error %}
-			{{ fail }}<br>
-		{% endfor %}
-		<form action="/login" method="post">
-			{%csrf_token %}
-			Email: <input type="email" name="email"><br>
-			Password: <input type="password" name="password"><br>
-			<input type="submit" value="Login"><br>
-		</form>
+		<div class="col-sm-4 col-md-4">
+			{% for fail in errors %}
+				{{ fail }}<br>
+			{% endfor %}
+			{% for success in passes %}
+				{{ success}}<br>
+			{% endfor %}
+		</div>
+		<div class="col-sm-4 col-md-4">
+			<h4>Register</h4>
+			<form action="/register" method="post">
+				{% csrf_token %}
+				First Name: <input type="text" name="first_name"><br>
+				Last Name: <input type="text" name="last_name"><br>
+				Email: <input type="text" name="email"><br>
+				<!-- multiple attempts at using the type = 'date' couldn't get it to save properly into the db -->
+				Date of Birth: <input type="text" name="dob" placeholder="YYYY-MM-DD"><br>
+				Password: <input type="password" name="password"><br>
+				<h4>Password must be at least 8 characters</h4><br>
+				Confirm Password: <input type="password" name="cpassword"><br>
+				<input type="submit" value="Register"><br>
+			</form>
+		</div>
+		<div class="col-sm-4 col-md-4">
+			<h4>Login</h4>
+			{% for fail in log_error %}
+				{{ fail }}<br>
+			{% endfor %}
+			<form action="/login" method="post">
+				{%csrf_token %}
+				Email: <input type="email" name="email"><br>
+				Password: <input type="password" name="password"><br>
+				<input type="submit" value="Login"><br>
+			</form>
+		</div>
 	</body>
 </html>
