@@ -3,16 +3,16 @@
 	<head>
 		<title>Login/Registration</title>
 		{% load static %}
-		<link rel="stylesheet" type="text/css" href="{% static 'kingdoms/css/style.css' %}" />
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	</head>
 	<body>
 		<div class="col-sm-4 col-md-4">
+			<h1>Alerts:</h1>
 			{% for fail in errors %}
-				{{ fail }}<br>
+				<div style='background-color: red'>{{ fail }}</div>
 			{% endfor %}
 			{% for success in passes %}
-				{{ success}}<br>
+				<div style='background-color: blue'>{{ success}}</div>
 			{% endfor %}
 		</div>
 		<div class="col-sm-4 col-md-4">
@@ -22,18 +22,17 @@
 				First Name: <input type="text" name="first_name"><br>
 				Last Name: <input type="text" name="last_name"><br>
 				Email: <input type="text" name="email"><br>
-				<!-- multiple attempts at using the type = 'date' couldn't get it to save properly into the db -->
 				Date of Birth: <input type="text" name="dob" placeholder="YYYY-MM-DD"><br>
-				Password: <input type="password" name="password"><br>
+				Password: <input type="password" name="first_password"><br>
 				<h4>Password must be at least 8 characters</h4><br>
-				Confirm Password: <input type="password" name="cpassword"><br>
+				Confirm Password: <input type="password" name="confirmed_password"><br>
 				<input type="submit" value="Register"><br>
 			</form>
 		</div>
 		<div class="col-sm-4 col-md-4">
 			<h4>Login</h4>
 			{% for fail in log_error %}
-				{{ fail }}<br>
+				<div style='background-color: red'>{{ fail }}</div><br>
 			{% endfor %}
 			<form action="/login" method="post">
 				{%csrf_token %}
